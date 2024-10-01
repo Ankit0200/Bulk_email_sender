@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Bulk Email Sender</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        textarea, input[type="text"], input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #3498db;
+            color: #ffffff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        #page2 {
+            display: {% if email_subject %} block {% else %} none {% endif %}; /* Show page2 if email_subject exists */
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="page1">
+        <h1>AI Bulk Email Sender</h1>
+        <form id="A" method="post">
+            <input type="hidden" name="form_type" value="A"> <!-- Hidden input to identify the form -->
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="emailPurpose">What would you like to send?</label>
+                <textarea id="emailPurpose" name="EmailPrompt" placeholder="Describe the purpose of your email. For example: 'A promotional email about our summer sale' or 'A newsletter update about our company's recent achievements'." required></textarea>
+            </div>
+            <button type="submit" class="btn">Generate Email</button>
+        </form>
+    </div>
+
+    <div class="container" id="page2">
+        <h1>Finalize Your Bulk Email</h1>
+        <form id="finalEmailForm" method="post">
+            <input type="hidden" name="form_type" value="B"> <!-- Hidden input to identify the form -->
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="emailSubject">Email Subject:</label>
+                <input type="text" id="emailSubject" name="emailSubject" value="{{ email_subject }}" required>
+            </div>
+            <div class="form-group">
+                <label for="emailBody">Email Body:</label>
+                <textarea id="emailBody" name="emailBody" required>{{ email_body }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="recipientList">Upload Recipient List (CSV):</label>
+                <input type="file" id="recipientList" name="recipientList" accept=".csv" required>
+            </div>
+            <button type="submit" class="btn">Send Bulk Email</button>
+        </form>
+    </div>
+</body>
+</html>
